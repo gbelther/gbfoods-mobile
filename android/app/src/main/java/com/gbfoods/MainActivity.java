@@ -40,7 +40,6 @@ public class MainActivity extends ReactActivity {
       }
     });
   }
-}
 
   /**
    * Align the back button behavior with Android S
