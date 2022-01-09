@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Alert,
   Button,
@@ -16,6 +16,11 @@ import { SubmitButton } from "../../components/SubmitButton";
 
 import * as Sty from "./styles";
 
+interface ISubmitForm {
+  email: string;
+  password: string;
+}
+
 const schema = yup.object().shape({
   email: yup.string().email("E-mail inválido").required("Campo obrigatório"),
   password: yup.string().required("Campo obrigatório"),
@@ -32,8 +37,11 @@ export function Login() {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data) => {
-    console.log(JSON.stringify(data));
+  const onSubmit = ({ email, password }: ISubmitForm) => {
+    console.log({
+      email,
+      password,
+    });
   };
 
   return (
@@ -61,10 +69,19 @@ export function Login() {
                   required: true,
                 }}
                 render={({ field: { onChange, value } }) => (
-                  <Sty.Input onChangeText={onChange} value={value} />
+                  <Sty.Input
+                    placeholder="Digite seu E-mail"
+                    onChangeText={onChange}
+                    value={value}
+                    autoCorrect={false}
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                  />
                 )}
               />
-              <Sty.ErrorFeedback>E-mail inválido</Sty.ErrorFeedback>
+              <Sty.ErrorFeedback>
+                {!!errors.email ? errors.email.message : ""}
+              </Sty.ErrorFeedback>
             </Sty.InputWrapper>
             <Sty.InputWrapper>
               <Sty.Label>Senha</Sty.Label>
@@ -75,10 +92,20 @@ export function Login() {
                   required: true,
                 }}
                 render={({ field: { onChange, value } }) => (
-                  <Sty.Input onChangeText={onChange} value={value} />
+                  <Sty.Input
+                    placeholder="Digite sua senha"
+                    onChangeText={onChange}
+                    value={value}
+                    autoCorrect={false}
+                    keyboardType="default"
+                    autoCapitalize="none"
+                    secureTextEntry={true}
+                  />
                 )}
               />
-              <Sty.ErrorFeedback>Senha inválida</Sty.ErrorFeedback>
+              <Sty.ErrorFeedback>
+                {errors.password ? errors.password.message : ""}
+              </Sty.ErrorFeedback>
             </Sty.InputWrapper>
             <Sty.ButtonWrapper>
               <SubmitButton

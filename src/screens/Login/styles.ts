@@ -13,6 +13,7 @@ export const Container = styled.View`
 
 export const Header = styled.View`
   width: 100%;
+  height: 30%;
   margin-top: ${getStatusBarHeight() + 10}px;
 
   display: flex;
@@ -32,10 +33,9 @@ export const Subtitle = styled.Text`
 
 export const Content = styled.View`
   width: 80%;
+  height: 70%;
   display: flex;
   align-items: center;
-
-  margin-top: 70px;
 `;
 
 export const InputWrapper = styled.View`
