@@ -56,7 +56,7 @@ export const Input = styled.TextInput`
   border-radius: 4px;
   font-size: ${RFValue(24)}px;
 
-  padding: 4px 8px;
+  padding: 8px;
 `;
 
 export const ErrorFeedback = styled.Text`
