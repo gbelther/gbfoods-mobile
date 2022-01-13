@@ -34,6 +34,7 @@ export const Subtitle = styled.Text`
 `;
 
 export const Content = styled.ScrollView.attrs({
+  showsVerticalScrollIndicator: false,
   contentContainerStyle: {
     display: "flex",
     alignItems: "center",
