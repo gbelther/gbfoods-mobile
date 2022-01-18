@@ -3,9 +3,11 @@
     "name": "gbfoods",
     "slug": "gbfoods",
     "version": "1.0.0",
-    "assetBundlePatterns": [
-      "**/*"
-    ]
+    "assetBundlePatterns": ["**/*"],
+    "splash": {
+      "image": "./src/assets/splash.png",
+      "backgroundColor": "#0d0d0d"
+    }
   },
   "name": "gbfoods"
 }
