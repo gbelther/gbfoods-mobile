@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import {
   Keyboard,
   KeyboardAvoidingView,
+  Platform,
   StatusBar,
   TouchableWithoutFeedback,
 } from "react-native";
@@ -11,8 +12,14 @@ import { useTheme } from "styled-components";
 import * as yup from "yup";
 
 import { SubmitButton } from "../../components/SubmitButton";
+import { BackButton } from "../../components/BackButton";
 
 import * as Sty from "./styles";
+import {
+  NavigationProp,
+  ParamListBase,
+  useNavigation,
+} from "@react-navigation/native";
 
 interface ISubmitForm {
   name: string;
@@ -33,6 +40,7 @@ const schema = yup.object().shape({
 
 export function Register() {
   const theme = useTheme();
+  const navigation = useNavigation() as NavigationProp<ParamListBase>;
 
   const {
     control,
@@ -54,11 +62,18 @@ export function Register() {
       password,
       passwordConfirm,
     });
+
+    navigation.navigate("Login");
+  };
+
+  const handleBack = () => {
+    console.log("Back");
+    navigation.goBack();
   };
 
   return (
-    <KeyboardAvoidingView>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+    <KeyboardAvoidingView behavior="position" enabled>
+      <TouchableWithoutFeedback>
         <Sty.Container>
           <StatusBar
             barStyle="dark-content"
@@ -67,6 +82,10 @@ export function Register() {
           />
 
           <Sty.Header>
+            <Sty.BackButtonWrapper>
+              <BackButton onPress={handleBack} />
+            </Sty.BackButtonWrapper>
+
             <Sty.Title>Registre-se</Sty.Title>
             <Sty.Subtitle>e peça seu lanche agora!</Sty.Subtitle>
           </Sty.Header>
@@ -87,7 +106,7 @@ export function Register() {
                     value={value}
                     autoCorrect={false}
                     keyboardType="default"
-                    autoCapitalize="none"
+                    autoCapitalize="words"
                   />
                 )}
               />
@@ -171,12 +190,6 @@ export function Register() {
                 title="CADASTRAR"
                 backgroundColor={theme.colors.main}
                 onPress={handleSubmit(onSubmit)}
-              />
-              <SubmitButton
-                title="VOLTAR"
-                backgroundColor={theme.colors.background_inverted}
-                fontColor={theme.colors.text_inverted}
-                onPress={() => console.log("Cadastre-se")}
               />
             </Sty.ButtonWrapper>
           </Sty.Content>

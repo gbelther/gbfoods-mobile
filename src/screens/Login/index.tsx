@@ -1,12 +1,15 @@
 import React, { useEffect } from "react";
 import {
-  Alert,
-  Button,
   Keyboard,
   KeyboardAvoidingView,
   StatusBar,
   TouchableWithoutFeedback,
 } from "react-native";
+import {
+  NavigationProp,
+  ParamListBase,
+  useNavigation,
+} from "@react-navigation/native";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useTheme } from "styled-components";
@@ -28,6 +31,7 @@ const schema = yup.object().shape({
 
 export function Login() {
   const theme = useTheme();
+  const navigation = useNavigation() as NavigationProp<ParamListBase>;
 
   const {
     control,
@@ -42,6 +46,10 @@ export function Login() {
       email,
       password,
     });
+  };
+
+  const handleRegister = () => {
+    navigation.navigate("Register");
   };
 
   return (
@@ -117,7 +125,7 @@ export function Login() {
                 title="CADASTRE-SE"
                 backgroundColor={theme.colors.background_inverted}
                 fontColor={theme.colors.text_inverted}
-                onPress={() => console.log("Cadastre-se")}
+                onPress={handleRegister}
               />
             </Sty.ButtonWrapper>
           </Sty.Content>

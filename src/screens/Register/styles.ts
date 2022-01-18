@@ -15,10 +15,16 @@ export const Container = styled.View`
 export const Header = styled.View`
   width: 100%;
   margin-top: ${getStatusBarHeight()}px;
-  padding-bottom: 16px;
+  padding-bottom: 24px;
 
   display: flex;
   align-items: center;
+`;
+
+export const BackButtonWrapper = styled.View`
+  position: absolute;
+  top: ${getStatusBarHeight() + -8}px;
+  left: 16px;
 `;
 
 export const Title = styled.Text`
@@ -45,7 +51,7 @@ export const Content = styled.ScrollView.attrs({
 
 export const InputWrapper = styled.View`
   width: 100%;
-  margin-bottom: ${RFValue(16)}px;
+  margin-bottom: ${RFValue(20)}px;
 
   display: flex;
 `;
