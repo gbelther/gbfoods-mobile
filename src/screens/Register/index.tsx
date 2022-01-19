@@ -93,7 +93,7 @@ export function Register() {
   };
 
   return (
-    <KeyboardAvoidingView behavior="position" enabled>
+    <KeyboardAvoidingView behavior="padding" enabled>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <Sty.Container>
           <StatusBar
