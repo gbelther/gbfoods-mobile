@@ -8,6 +8,12 @@ interface ISignInProps {
   password: string;
 }
 
+interface IRegisterProps {
+  name: string;
+  email: string;
+  password: string;
+}
+
 interface IUser {
   id: string;
   name: string;
@@ -19,6 +25,7 @@ interface IAuthContext {
   user: IUser | null;
   login(credentials: ISignInProps): Promise<void>;
   logout(): Promise<void>;
+  register(data: IRegisterProps): Promise<void>;
 }
 
 interface IAuthProviderProps {
@@ -80,8 +87,20 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
     }
   };
 
+  const register = async ({ name, email, password }) => {
+    try {
+      await api.post("/users", {
+        name,
+        email,
+        password,
+      });
+    } catch (error) {
+      throw error;
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user: data, login, logout }}>
+    <AuthContext.Provider value={{ user: data, login, logout, register }}>
       {children}
     </AuthContext.Provider>
   );

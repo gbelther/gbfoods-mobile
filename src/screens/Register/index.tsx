@@ -23,6 +23,7 @@ import { api } from "../../services/api";
 import { ErrorHandling } from "../../utils/errors/implementation/ErrorHandling";
 
 import * as Sty from "./styles";
+import { useAuth } from "../../hooks/useAuth";
 
 interface ISubmitForm {
   name: string;
@@ -44,6 +45,8 @@ const schema = yup.object().shape({
 export function Register() {
   const theme = useTheme();
   const navigation = useNavigation() as NavigationProp<ParamListBase>;
+
+  const { register } = useAuth();
 
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [errorRequest, setErrorRequest] = useState({
@@ -68,7 +71,7 @@ export function Register() {
     setLoadingSubmit(true);
 
     try {
-      await api.post("/users", {
+      await register({
         name,
         email,
         password,
