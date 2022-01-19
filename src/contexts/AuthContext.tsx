@@ -16,8 +16,9 @@ interface IUser {
 }
 
 interface IAuthContext {
-  user: IUser;
+  user: IUser | null;
   login(credentials: ISignInProps): Promise<void>;
+  logout(): Promise<void>;
 }
 
 interface IAuthProviderProps {
@@ -29,7 +30,7 @@ export const AuthContext = createContext<IAuthContext>({} as IAuthContext);
 export const AuthProvider = ({ children }: IAuthProviderProps) => {
   const storageProvider = new StorageProvider();
 
-  const [data, setData] = useState<IUser>({} as IUser);
+  const [data, setData] = useState<IUser>(null);
 
   useEffect(() => {
     const getDataInStorage = async () => {
@@ -70,8 +71,17 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
     }
   };
 
+  const logout = async () => {
+    try {
+      await storageProvider.deleteStorage("@gbfoods");
+      setData(null);
+    } catch (error) {
+      throw error;
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user: data, login }}>
+    <AuthContext.Provider value={{ user: data, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
