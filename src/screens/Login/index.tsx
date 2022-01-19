@@ -85,7 +85,7 @@ export function Login() {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <Sty.Container>
           <StatusBar
-            barStyle="dark-content"
+            barStyle="light-content"
             backgroundColor="transparent"
             translucent
           />
