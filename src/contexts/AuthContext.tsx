@@ -78,7 +78,7 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
     }
   };
 
-  const logout = async () => {
+  const logout = async (): Promise<void> => {
     try {
       await storageProvider.deleteStorage("@gbfoods");
       setData(null);
@@ -87,7 +87,7 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
     }
   };
 
-  const register = async ({ name, email, password }) => {
+  const register = async ({ name, email, password }): Promise<void> => {
     try {
       await api.post("/users", {
         name,
