@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -14,8 +14,12 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useTheme } from "styled-components";
 import * as yup from "yup";
+import { AxiosError } from "axios";
 
 import { SubmitButton } from "../../components/SubmitButton";
+
+import { api } from "../../services/api";
+import { ErrorHandling } from "../../utils/errors/implementation/ErrorHandling";
 
 import * as Sty from "./styles";
 
@@ -33,6 +37,12 @@ export function Login() {
   const theme = useTheme();
   const navigation = useNavigation() as NavigationProp<ParamListBase>;
 
+  const [loadingSubmit, setLoadingSubmit] = useState(false);
+  const [errorRequest, setErrorRequest] = useState({
+    isShow: false,
+    message: "",
+  });
+
   const {
     control,
     handleSubmit,
@@ -41,11 +51,31 @@ export function Login() {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = ({ email, password }: ISubmitForm) => {
-    console.log({
-      email,
-      password,
+  const onSubmit = async ({ email, password }: ISubmitForm) => {
+    setLoadingSubmit(true);
+    setErrorRequest({
+      isShow: false,
+      message: "",
     });
+
+    try {
+      const response = await api.post("sessions", {
+        email,
+        password,
+      });
+
+      console.log(response.data);
+    } catch (error) {
+      const errorHandling = new ErrorHandling();
+      const errorMessage = errorHandling.getMessage(error as AxiosError);
+
+      setErrorRequest({
+        isShow: true,
+        message: errorMessage,
+      });
+    } finally {
+      setLoadingSubmit(false);
+    }
   };
 
   const handleRegister = () => {
@@ -66,6 +96,10 @@ export function Login() {
             <Sty.Title>Faça login</Sty.Title>
             <Sty.Subtitle>e peça seu lanche agora!</Sty.Subtitle>
           </Sty.Header>
+
+          {errorRequest.isShow && (
+            <Sty.ErrorFeedback>{errorRequest.message}</Sty.ErrorFeedback>
+          )}
 
           <Sty.Content>
             <Sty.InputWrapper>
@@ -120,6 +154,7 @@ export function Login() {
                 title="ENTRAR"
                 backgroundColor={theme.colors.main}
                 onPress={handleSubmit(onSubmit)}
+                loading={loadingSubmit}
               />
               <SubmitButton
                 title="CADASTRE-SE"
