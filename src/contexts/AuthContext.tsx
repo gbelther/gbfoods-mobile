@@ -1,7 +1,7 @@
-import { createContext, ReactNode, useState } from "react";
+import { createContext, ReactNode, useEffect, useState } from "react";
 
 import { api } from "../services/api";
-import { ErrorHandling } from "../utils/errors/implementation/ErrorHandling";
+import { StorageProvider } from "../providers";
 
 interface ISignInProps {
   email: string;
@@ -27,7 +27,24 @@ interface IAuthProviderProps {
 export const AuthContext = createContext<IAuthContext>({} as IAuthContext);
 
 export const AuthProvider = ({ children }: IAuthProviderProps) => {
+  const storageProvider = new StorageProvider();
+
   const [data, setData] = useState<IUser>({} as IUser);
+
+  useEffect(() => {
+    const getDataInStorage = async () => {
+      try {
+        const dataStorageString = await storageProvider.getStorage("@gbfoods");
+        const dataStorageJson = JSON.parse(dataStorageString) as IUser;
+
+        setData(dataStorageJson);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getDataInStorage();
+  }, []);
 
   const login = async ({ email, password }: ISignInProps): Promise<void> => {
     try {
@@ -46,6 +63,7 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
         token,
       };
 
+      await storageProvider.setStorage("@gbfoods", JSON.stringify(userData));
       setData(userData);
     } catch (error) {
       throw error;
