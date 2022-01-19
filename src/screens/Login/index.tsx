@@ -18,6 +18,7 @@ import { AxiosError } from "axios";
 
 import { SubmitButton } from "../../components/SubmitButton";
 
+import { useAuth } from "../../hooks/useAuth";
 import { api } from "../../services/api";
 import { ErrorHandling } from "../../utils/errors/implementation/ErrorHandling";
 
@@ -36,6 +37,8 @@ const schema = yup.object().shape({
 export function Login() {
   const theme = useTheme();
   const navigation = useNavigation() as NavigationProp<ParamListBase>;
+
+  const { login } = useAuth();
 
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [errorRequest, setErrorRequest] = useState({
@@ -59,12 +62,7 @@ export function Login() {
     });
 
     try {
-      const response = await api.post("sessions", {
-        email,
-        password,
-      });
-
-      console.log(response.data);
+      await login({ email, password });
     } catch (error) {
       const errorHandling = new ErrorHandling();
       const errorMessage = errorHandling.getMessage(error as AxiosError);
