@@ -1,25 +1,28 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import {
   Keyboard,
   KeyboardAvoidingView,
-  Platform,
   StatusBar,
   TouchableWithoutFeedback,
 } from "react-native";
-import { Controller, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useTheme } from "styled-components";
-import * as yup from "yup";
-
-import { SubmitButton } from "../../components/SubmitButton";
-import { BackButton } from "../../components/BackButton";
-
-import * as Sty from "./styles";
 import {
   NavigationProp,
   ParamListBase,
   useNavigation,
 } from "@react-navigation/native";
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useTheme } from "styled-components";
+import * as yup from "yup";
+import { AxiosError } from "axios";
+
+import { SubmitButton } from "../../components/SubmitButton";
+import { BackButton } from "../../components/BackButton";
+
+import { api } from "../../services/api";
+import { ErrorHandling } from "../../utils/errors/implementation/ErrorHandling";
+
+import * as Sty from "./styles";
 
 interface ISubmitForm {
   name: string;
@@ -42,6 +45,12 @@ export function Register() {
   const theme = useTheme();
   const navigation = useNavigation() as NavigationProp<ParamListBase>;
 
+  const [loadingSubmit, setLoadingSubmit] = useState(false);
+  const [errorRequest, setErrorRequest] = useState({
+    isShow: false,
+    message: "",
+  });
+
   const {
     control,
     handleSubmit,
@@ -50,30 +59,42 @@ export function Register() {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = ({
+  const onSubmit = async ({
     name,
     email,
     password,
     passwordConfirm,
   }: ISubmitForm) => {
-    console.log({
-      name,
-      email,
-      password,
-      passwordConfirm,
-    });
+    setLoadingSubmit(true);
 
-    navigation.navigate("Login");
+    try {
+      await api.post("/users", {
+        name,
+        email,
+        password,
+      });
+
+      navigation.navigate("Login");
+    } catch (error) {
+      const errorHandling = new ErrorHandling();
+      const errorMessage = errorHandling.getMessage(error as AxiosError);
+
+      setErrorRequest({
+        isShow: true,
+        message: errorMessage,
+      });
+    } finally {
+      setLoadingSubmit(false);
+    }
   };
 
   const handleBack = () => {
-    console.log("Back");
     navigation.goBack();
   };
 
   return (
     <KeyboardAvoidingView behavior="position" enabled>
-      <TouchableWithoutFeedback>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <Sty.Container>
           <StatusBar
             barStyle="dark-content"
@@ -89,6 +110,10 @@ export function Register() {
             <Sty.Title>Registre-se</Sty.Title>
             <Sty.Subtitle>e peça seu lanche agora!</Sty.Subtitle>
           </Sty.Header>
+
+          {errorRequest.isShow && (
+            <Sty.ErrorFeedback>{errorRequest.message}</Sty.ErrorFeedback>
+          )}
 
           <Sty.Content>
             <Sty.InputWrapper>
@@ -190,6 +215,7 @@ export function Register() {
                 title="CADASTRAR"
                 backgroundColor={theme.colors.main}
                 onPress={handleSubmit(onSubmit)}
+                loading={loadingSubmit}
               />
             </Sty.ButtonWrapper>
           </Sty.Content>
