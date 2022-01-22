@@ -2,6 +2,7 @@ import { createContext, ReactNode, useEffect, useState } from "react";
 
 import { api } from "../services/api";
 import { StorageProvider } from "../providers";
+import { IGetErrorInformations } from "../utils/errors/IErrorHandling";
 
 interface ISignInProps {
   email: string;
@@ -14,11 +15,12 @@ interface IRegisterProps {
   password: string;
 }
 
-interface IUser {
+export interface IUser {
   id: string;
   name: string;
   email: string;
   token: string;
+  refresh_token: string;
 }
 
 interface IAuthContext {
@@ -26,6 +28,7 @@ interface IAuthContext {
   login(credentials: ISignInProps): Promise<void>;
   logout(): Promise<void>;
   register(data: IRegisterProps): Promise<void>;
+  verifyError(error: IGetErrorInformations): IGetErrorInformations;
 }
 
 interface IAuthProviderProps {
@@ -46,6 +49,9 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
         const dataStorageJson = JSON.parse(dataStorageString) as IUser;
 
         setData(dataStorageJson);
+        api.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${dataStorageJson.token}`;
       } catch (error) {
         console.log(error);
       }
@@ -61,14 +67,14 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
         password,
       });
 
-      const { user, token } = response.data;
-      api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      const { user, token, refresh_token } = response.data;
 
       const userData: IUser = {
         id: user.id,
         name: user.name,
         email: user.email,
         token,
+        refresh_token,
       };
 
       await storageProvider.setStorage("@gbfoods", JSON.stringify(userData));
@@ -99,8 +105,18 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
     }
   };
 
+  const verifyError = (error: IGetErrorInformations): IGetErrorInformations => {
+    if (error.statusCode === 401) {
+      setData(null);
+    }
+
+    return error;
+  };
+
   return (
-    <AuthContext.Provider value={{ user: data, login, logout, register }}>
+    <AuthContext.Provider
+      value={{ user: data, login, logout, register, verifyError }}
+    >
       {children}
     </AuthContext.Provider>
   );

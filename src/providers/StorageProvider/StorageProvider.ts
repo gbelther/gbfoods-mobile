@@ -11,7 +11,7 @@ class StorageProvider implements IStorageProvider {
     return await AsyncStorage.getItem(key);
   }
 
-  async deleteStorage(key: any): Promise<void> {
+  async deleteStorage(key: string): Promise<void> {
     await AsyncStorage.removeItem(key);
   }
 }

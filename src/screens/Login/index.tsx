@@ -64,6 +64,7 @@ export function Login() {
     try {
       await login({ email, password });
     } catch (error) {
+      console.log("error:", error);
       const errorHandling = new ErrorHandling();
       const errorMessage = errorHandling.getMessage(error as AxiosError);
 

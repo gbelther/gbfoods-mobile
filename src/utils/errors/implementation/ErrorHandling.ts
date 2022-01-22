@@ -1,16 +1,34 @@
 import { AxiosError } from "axios";
 
-import { IErrorHandling } from "../IErrorHandling";
+import { IErrorHandling, IGetErrorInformations } from "../IErrorHandling";
 
 class ErrorHandling implements IErrorHandling {
-  getMessage(error: AxiosError<any, any>): string {
+  public static updateNecessary = false;
+
+  getMessage(error: AxiosError): string {
     const { response, message } = error;
 
-    if (typeof response.data.message === "string") {
+    if (response.data && typeof response.data.message === "string") {
       return response.data.message;
     }
 
     return message;
+  }
+
+  getStatusCode(error: AxiosError): number {
+    const { response } = error;
+
+    return response.status;
+  }
+
+  getInformations(error: AxiosError): IGetErrorInformations {
+    const message = this.getMessage(error);
+    const statusCode = this.getStatusCode(error);
+
+    return {
+      message,
+      statusCode,
+    };
   }
 }
 
