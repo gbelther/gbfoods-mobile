@@ -1,6 +1,7 @@
 export default {
   colors: {
     main: "#cc66cc",
+    disabled: "#BBBBBB",
 
     failure: "#e60000",
     success: "#49d049",
