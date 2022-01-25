@@ -17,4 +17,7 @@ export default {
     primary_500: "Poppins_500Medium",
     primary_700: "Poppins_700Bold",
   },
+  spacings: {
+    tab_height: 50,
+  },
 };
