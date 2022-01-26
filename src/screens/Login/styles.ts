@@ -51,14 +51,6 @@ export const Label = styled.Text`
   color: ${({ theme }) => theme.colors.text};
 `;
 
-export const Input = styled.TextInput`
-  background-color: ${({ theme }) => theme.colors.background_inverted};
-  border-radius: 4px;
-  font-size: ${RFValue(24)}px;
-
-  padding: 8px;
-`;
-
 export const ErrorFeedback = styled.Text`
   color: ${({ theme }) => theme.colors.failure};
 `;

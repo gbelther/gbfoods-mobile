@@ -16,10 +16,10 @@ import { useTheme } from "styled-components";
 import * as yup from "yup";
 import { AxiosError } from "axios";
 
+import { TextField } from "../../components/TextField";
 import { SubmitButton } from "../../components/SubmitButton";
 
 import { useAuth } from "../../hooks/useAuth";
-import { api } from "../../services/api";
 import { ErrorHandling } from "../../utils/errors/implementation/ErrorHandling";
 
 import * as Sty from "./styles";
@@ -110,7 +110,7 @@ export function Login() {
                   required: true,
                 }}
                 render={({ field: { onChange, value } }) => (
-                  <Sty.Input
+                  <TextField
                     placeholder="Digite seu E-mail"
                     onChangeText={onChange}
                     value={value}
@@ -133,7 +133,7 @@ export function Login() {
                   required: true,
                 }}
                 render={({ field: { onChange, value } }) => (
-                  <Sty.Input
+                  <TextField
                     placeholder="Digite sua senha"
                     onChangeText={onChange}
                     value={value}
