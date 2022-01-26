@@ -6,6 +6,7 @@ import { AppStackRoutes } from "./app.stack.routes";
 
 import { Profile } from "../screens/Profile";
 import { Cart } from "../screens/Cart";
+import { ProfileStackRoutes } from "./profile.stack.routes";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -48,7 +49,7 @@ export function AppTabRoutes() {
       />
       <Screen
         name="Profile"
-        component={Profile}
+        component={ProfileStackRoutes}
         options={{
           tabBarIcon: ({ color }) => (
             <MaterialIcons name="account-circle" size={32} color={color} />
