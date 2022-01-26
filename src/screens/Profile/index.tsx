@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { StatusBar } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useTheme } from "styled-components";
@@ -9,9 +9,12 @@ import * as Sty from "./styles";
 
 export function Profile() {
   const theme = useTheme();
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
+
+  const [name] = useState(() => user.name.split(" ")[0]);
 
   const handleLogout = async () => {
+    console.log("Click");
     await logout();
   };
 
@@ -32,6 +35,12 @@ export function Profile() {
           />
         </Sty.LogoutButton>
       </Sty.LogoutWrapper>
+
+      <Sty.Header>
+        <Sty.Title>
+          Olá, <Sty.Name>{name}</Sty.Name>
+        </Sty.Title>
+      </Sty.Header>
 
       <Sty.ProfileWrapper>
         <Sty.AvatarWrapper>

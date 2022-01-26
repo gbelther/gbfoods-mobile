@@ -2,7 +2,7 @@ import styled from "styled-components/native";
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import { RFValue } from "react-native-responsive-fontsize";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { RectButton } from "react-native-gesture-handler";
+import { BorderlessButton, RectButton } from "react-native-gesture-handler";
 
 export const Container = styled(SafeAreaView)`
   width: 100%;
@@ -17,10 +17,31 @@ export const Container = styled(SafeAreaView)`
 export const LogoutWrapper = styled.View`
   position: absolute;
   top: ${getStatusBarHeight() + 25}px;
-  right: 5%;
+  right: 8%;
+  z-index: 1;
 `;
 
-export const LogoutButton = styled.TouchableOpacity``;
+export const LogoutButton = styled(BorderlessButton)``;
+
+export const Header = styled.View`
+  width: 100%;
+  margin-top: ${getStatusBarHeight() + 8}px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+`;
+
+export const Title = styled.Text`
+  color: ${({ theme }) => theme.colors.text};
+  font-family: ${({ theme }) => theme.fonts.primary_500};
+  font-size: ${RFValue(24)}px;
+`;
+
+export const Name = styled.Text`
+  color: ${({ theme }) => theme.colors.text};
+  font-family: ${({ theme }) => theme.fonts.primary_700};
+  font-size: ${RFValue(32)}px;
+`;
 
 export const Options = styled.View`
   width: 100%;
@@ -47,7 +68,6 @@ export const OptionText = styled.Text`
 export const ProfileWrapper = styled.View`
   width: 80%;
   height: 100%;
-  margin-top: ${getStatusBarHeight() + 25}px;
   display: flex;
   align-items: center;
 `;
