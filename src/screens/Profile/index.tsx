@@ -6,9 +6,15 @@ import { useTheme } from "styled-components";
 import { useAuth } from "../../hooks/useAuth";
 
 import * as Sty from "./styles";
+import {
+  NavigationProp,
+  ParamListBase,
+  useNavigation,
+} from "@react-navigation/native";
 
 export function Profile() {
   const theme = useTheme();
+  const navigation = useNavigation() as NavigationProp<ParamListBase>;
   const { user, logout } = useAuth();
 
   const [name] = useState(() => user.name.split(" ")[0]);
@@ -16,6 +22,10 @@ export function Profile() {
   const handleLogout = async () => {
     console.log("Click");
     await logout();
+  };
+
+  const handleEditProfile = () => {
+    navigation.navigate("ProfileEdit");
   };
 
   return (
@@ -47,7 +57,7 @@ export function Profile() {
           <Sty.Avatar source={{ uri: "https://github.com/gbelther.png" }} />
         </Sty.AvatarWrapper>
         <Sty.Options>
-          <Sty.Option onPress={() => console.log("Click")}>
+          <Sty.Option onPress={handleEditProfile}>
             <Sty.OptionText>Editar Perfil</Sty.OptionText>
           </Sty.Option>
           <Sty.Option onPress={() => console.log("Click")}>
